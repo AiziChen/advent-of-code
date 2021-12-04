@@ -9,7 +9,7 @@
             (cons n (loop (get-line p)))]))))))
 
 
-(define process
+(define part1
   (lambda (is)
     (let loop ([is is]
                [position 0]
@@ -25,10 +25,28 @@
        [else
         (loop (cdr is) position depth)]))))
 
+(define part2
+  (lambda (is)
+    (let loop ([is is]
+               [position 0]
+               [aim 0]
+               [depth 0])
+      (cond
+       [(null? is) (* position depth)]
+       [(equal? "forward" (caar is))
+        (loop (cdr is) (+ (cdar is) position) aim (+ depth (* (cdar is) aim)))]
+       [(equal? "down" (caar is))
+        (loop (cdr is) position (+ aim (cdar is)) depth)]
+       [(equal? "up" (caar is))
+        (loop (cdr is) position (- aim (cdar is)) depth)]
+       [else
+        (loop (cdr is) depth aim)]))))
+
 (let ([instructions
        (map (lambda (line)
               (let ([len (string-length line)])
                 (cons (substring line 0 (- len 2))
                       (string->number (substring line (- len 1) len)))))
             (file->lines "input"))])
-  (display (process instructions)))
+  (printf "part1 answer: ~a~n" (part1 instructions))
+  (printf "part2 answer: ~a~n" (part2 instructions)))
