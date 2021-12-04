@@ -40,7 +40,7 @@
        [(equal? "up" (caar is))
         (loop (cdr is) position (- aim (cdar is)) depth)]
        [else
-        (loop (cdr is) depth aim)]))))
+        (loop (cdr is) position aim depth)]))))
 
 (let ([instructions
        (map (lambda (line)
